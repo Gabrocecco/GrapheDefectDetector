@@ -1,0 +1,11 @@
+prefix=/home/gabro/grapheneDetectProject/.conda
+exec_prefix=/home/gabro/grapheneDetectProject/.conda
+libdir=/home/gabro/grapheneDetectProject/.conda/lib
+includedir=/home/gabro/grapheneDetectProject/.conda/include
+
+Name: uuid
+Description: Universally unique id library
+Version: 2.32.1
+Requires:
+Cflags: -I${includedir}/uuid
+Libs: -L${libdir} -luuid

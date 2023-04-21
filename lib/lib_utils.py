@@ -38,9 +38,9 @@ class Utils:
         Z = []
         atoms = []
 
-        with open(str(spath), "r") as f:
+        with open(str(spath), "r") as f:    #apro il file .xyz
 
-            for line in f:
+            for line in f:      #itero le righe del file, splittandole 
                 l = line.split()
                 if len(l) == 4:
                     X.append(float(l[1]))
@@ -52,7 +52,7 @@ class Utils:
         Y = np.asarray(Y)
         Z = np.asarray(Z)
 
-        return X, Y, Z, atoms
+        return X, Y, Z, atoms   #ritorna 4 aray rappresentanti X,Y,Z e atom
     
     @staticmethod
     def crop_image(image: Image, name: str = None, dpath: Path = None) -> Image:
@@ -96,9 +96,9 @@ class Utils:
     ):
         """Generate a .npy matrix starting from lists of x,y,z coordinates"""
 
-        X, Y, Z, atoms = Utils.read_from_xyz_file(spath)
+        X, Y, Z, atoms = Utils.read_from_xyz_file(spath)    #recupero le coordinate dalla funzione read_from_xyz_file
 
-        if z_relative:
+        if z_relative: #se sto lavorando con la coordinata z relativa, i relativi massimi e minimi saranno i max e min dell'array di valori
             z_max = np.max(Z)
             z_min = np.min(Z)
 
@@ -112,6 +112,7 @@ class Utils:
             y_max = x[0][1]
             y_min = x[1][1]
 
+            #calcolo la risoluzione dell'immagine partendo dai valori massimi ottenuti prima 
             resolution = round(
                 4
                 * (
@@ -124,7 +125,7 @@ class Utils:
         else:
             path = spath.parent.joinpath("max_min_coordinates.txt")
 
-            x = np.loadtxt(str(path))
+            x = np.loadtxt(str(path))   #prendo dal file max_min_coordinates.txt i massimi e minimi valori.
 
             x_max = x[0][0]
             x_min = x[1][0]
@@ -144,7 +145,7 @@ class Utils:
                     )
                 )
             )
-
+        #ho 3 matrici, una sopra l'altra che rappresentano le posizioni dei 3 atomi di interesse.
         C = np.zeros((resolution, resolution))
         O = np.zeros((resolution, resolution))
         H = np.zeros((resolution, resolution))
