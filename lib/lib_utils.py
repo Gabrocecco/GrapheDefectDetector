@@ -1,3 +1,31 @@
+#imports 
+try:
+
+    from datetime import datetime
+    import seaborn as sns
+    import numpy as np
+    import pandas as pd
+    import shutil
+    from tqdm import tqdm
+    import random
+    from PIL import Image
+    import cv2
+    from time import time
+    import multiprocessing as mp
+    from torch.utils.data import DataLoader
+    from pathlib import Path
+    import matplotlib.pyplot as plt
+    import math
+    from scipy.stats import pearsonr, spearmanr, kendalltau, boxcox
+    import yaml
+    #from sklearn.model_selection import StratifiedShuffleSplit, train_test_split
+    from scipy.spatial.distance import pdist
+
+except Exception as e:
+
+    print("Some module are missing {}".format(e))
+
+
 class Utils:
     IMAGE_EXTENSIONS = (".jpg", ".png", ".jpeg")
 
@@ -136,3 +164,70 @@ class Utils:
 
             image = Image.fromarray(Matrix)
             Utils.crop_image(image, name + ".png", dpath)
+
+
+    @staticmethod
+    def dataset_max_and_min(spath: Path, dpath: Path = None) -> list:
+        """
+        This static method returns a list of the maximum and minimum values for each coordinate given a folder of .xyz files. It takes two parameters,
+        spath (Path) and dpath (Path), with dpath being optional. It creates two lists, MAX and MIN, which are initialized to [0, 0, 0].
+        It then iterates through the files in the spath directory and checks if each file is an .xyz file. If it is, it calls the find_max_and_min() method
+        from Utils to get the max and min values for that file. It then compares these values to MAX and MIN respectively to update them if necessary.
+        Finally, if dpath is not None, it saves the MAX and MIN lists as a text file in the dpath directory. Otherwise it just prints out MAX and MIN.
+        The method returns both MAX and MIN as a list.
+        """
+        """Return a list of Max and Min for each coordinate, given a folder of .xyz files"""
+
+        MAX = [0, 0, 0]
+        MIN = [0, 0, 0]
+
+        max = []
+        min = []
+
+        for file in spath.iterdir():
+            if file.suffix == ".xyz":
+                max, min = Utils.find_max_and_min(file)
+                if max[0] > MAX[0]:
+                    MAX[0] = max[0]
+                if min[0] < MIN[0]:
+                    MIN[0] = min[0]
+                if max[1] > MAX[1]:
+                    MAX[1] = max[1]
+                if min[1] < MIN[1]:
+                    MIN[1] = min[1]
+                if max[2] > MAX[2]:
+                    MAX[2] = max[2]
+                if min[2] < MIN[2]:
+                    MIN[2] = min[2]
+
+        if dpath is not None:
+            np.savetxt(dpath.joinpath("max_min_coordinates.txt"), [MAX, MIN])
+        else:
+            print([MAX, MIN])
+
+        return MAX, MIN
+
+    @staticmethod
+    def find_max_and_min(spath: Path):
+        """Return a list of Max and Min for each coordinate, given a single .xyz file"""
+
+        X = []
+        Y = []
+        Z = []
+
+        with open(str(spath), "r") as f:
+            for line in f:
+                l = line.split()
+                if len(l) == 4:
+                    X.append(float(l[1]))
+                    Y.append(float(l[2]))
+                    Z.append(float(l[3]))
+
+        X = np.asarray(X)
+        Y = np.asarray(Y)
+        Z = np.asarray(Z)
+
+        max = [np.max(X), np.max(Y), np.max(Z)]
+        min = [np.min(X), np.min(Y), np.min(Z)]
+
+        return max, min
