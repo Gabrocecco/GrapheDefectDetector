@@ -7,3 +7,10 @@ try:
 except Exception as e:
     print("Some module are missing {}".format(e))
 
+filePath = Path('/home/gabro/grapheneDetectProject/data.xyz/subset_xyz/graphene_67.xyz')
+immPath = Path('/home/gabro/grapheneDetectProject/images')
+
+
+print(filePath)
+#generate_bonds_png(pathFile, immPath)
+

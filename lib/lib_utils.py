@@ -21,6 +21,11 @@ try:
     #from sklearn.model_selection import StratifiedShuffleSplit, train_test_split
     from scipy.spatial.distance import pdist
 
+    #import per generate_bonds_png
+    from chemfiles import Trajectory    
+    from PIL import Image, ImageDraw
+    import os
+
 except Exception as e:
 
     print("Some module are missing {}".format(e))
@@ -28,6 +33,35 @@ except Exception as e:
 
 class Utils:
     IMAGE_EXTENSIONS = (".jpg", ".png", ".jpeg")
+
+    
+    def generate_bonds_png(spath, dpath, resolution=320):
+
+        name = (spath.split("/")[-1])[:-4]
+
+        with Trajectory(spath) as trajectory:
+            mol = trajectory.read()
+
+        B = Image.new("RGB", (resolution, resolution))
+        B_ = ImageDraw.Draw(B)
+
+        mol.guess_bonds()
+        if mol.topology.bonds_count() == 0:
+            print(f"No bonds guessed for {name}\n")
+        bonds = mol.topology.bonds
+
+        for i in range(len(bonds)):
+            x_1 = round(mol.positions[bonds[i][0]][0] * 2) + resolution / 2
+            y_1 = round(mol.positions[bonds[i][0]][1] * 2) + resolution / 2
+            x_2 = round(mol.positions[bonds[i][1]][0] * 2) + resolution / 2
+            y_2 = round(mol.positions[bonds[i][1]][1] * 2) + resolution / 2
+            line = [(x_1, y_1), (x_2, y_2)]
+            first_atom = mol.atoms[bonds[i][0]].name
+            second_atom = mol.atoms[bonds[i][1]].name
+            color = Utils.find_bound_type(first_atom, second_atom)
+            B_.line(line, fill=color, width=0)
+
+        B.save(os.path.join(dpath, name + "_bonds.png"))
 
     @staticmethod
     def read_from_xyz_file(spath: Path):
