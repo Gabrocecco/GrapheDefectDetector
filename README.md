@@ -1,5 +1,3 @@
 # GrapheDefectDetector
-ciao
-ciao
-
+work in progress
 
