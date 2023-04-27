@@ -22,8 +22,10 @@ try:
 
     #import per generate_bonds_png
     from chemfiles import Trajectory    
-    from PIL import Image, ImageDraw
+    from PIL import Image, ImageDraw, ImageFilter
     import os
+    import cv2
+    import skimage.exposure
 except Exception as e:
 
     print("Some module are missing {}".format(e))
@@ -66,9 +68,18 @@ class Utils:
             #color = "red"
             B_.line(line, fill=color, width=0)
 
-        #chiamo la funzione crop_image per scontornare l'immagine, adesso 
+        #chiamo la funzione crop_image per scontornare l'immagine
         B = Utils.crop_image(B)
         B.save(os.path.join(dpath, name + "_bonds.png"))
+
+        # create blurred image copy 
+        #img = cv2.imread(os.path.join(dpath, name + "_bonds.png"))
+        #blur = cv2.GaussianBlur(img, (0,0), sigmaX=3, sigmaY=3, borderType = cv2.BORDER_DEFAULT)
+        #blur = cv2.GaussianBlur(img,(5,5),0)
+        #blur = cv2.blur(img,(2,2),0)
+        #result = skimage.exposure.rescale_intensity(blur, in_range=(127.5,255), out_range=(0,255))
+        # save output
+        #cv2.imwrite(os.path.join(dpath, name + "_bonds_blurred.png"), result)
 
     #funzione che da' il colore all'immagine nel mio caso monocromatica essendoci solo atomi di carbonio
     def find_bound_type(first_atom, second_atom):
@@ -122,6 +133,11 @@ class Utils:
 
         return new_image
     
+
+
+
+
+
     # @staticmethod
     # def read_from_xyz_file(spath: Path):
     #     """Read xyz files and return lists of x,y,z coordinates and atoms"""

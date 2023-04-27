@@ -1,0 +1,9 @@
+
+path: /home/gabro/grapheneDetectProject/data/  #dataset root dir 
+train: images/  #train dataset 
+val: images/  #valdiation dataset 
+
+# Classes
+names:
+  0: err 
+  1: defect
