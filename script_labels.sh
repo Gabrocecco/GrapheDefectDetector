@@ -2,7 +2,7 @@
 
 #sostituisce la prima lettera di ogni riga con 0
 cd "data/labels"
-echo "$PWD"
+#echo "$PWD"
 ls
 
 for FILE in *; 
