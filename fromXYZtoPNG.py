@@ -4,21 +4,19 @@ from pathlib import Path
 from lib.lib_utils import Utils
 import os
 
-file_xyz = Path('/home/gabro/grapheneDetectProject/data.xyz/subset_xyz/graphene_67.xyz')
+#dichiarazione path utili
 cartellaImmaginiPath = Path('/home/gabro/grapheneDetectProject/images')
-dpath = Path('/home/gabro/grapheneDetectProject')
+projectPath = Path('/home/gabro/grapheneDetectProject')
 cartellaXYZ = Path('/home/gabro/grapheneDetectProject/data.xyz/subset_xyz/')
 
-#print("spath: %s" % file_xyz)
-#print("dpath: %s" % cartellaImmaginiPath)
+#generazione immagine singola
+nomeFileProva = "graphene_67.xyz"   #inserire file .xyz di esempio 
+path_xyz_prova = Path.joinpath(cartellaXYZ, nomeFileProva)
+Utils.generate_bonds_png(path_xyz_prova, projectPath)
 
-#lancio la funzione che genera le imamgini 
-Utils.generate_bonds_png(file_xyz, cartellaImmaginiPath)
 
-Utils.generate_bonds_png('/home/gabro/grapheneDetectProject/data.xyz/subset_xyz/graphene_238951.xyz', cartellaImmaginiPath)
-
-i=0
 #ciclo delle prime 10 immagini 
+i=0
 for nome_file_xyz in os.listdir(cartellaXYZ):
     if(i>=10):
         break
