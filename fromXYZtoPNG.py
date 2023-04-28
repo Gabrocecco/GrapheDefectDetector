@@ -2,6 +2,7 @@
 try:
     from pathlib import Path
     from lib.lib_utils import Utils 
+    # from sklearn.model_selection import train_test_split
     import os
 except Exception as e:
 
@@ -10,7 +11,8 @@ except Exception as e:
 #dichiarazione path utili
 cartellaImmaginiPath = Path('/home/gabro/grapheneDetectProject/data/images')
 rootPath = Path('/home/gabro/grapheneDetectProject')
-cartellaXYZPath = Path('/home/gabro/grapheneDetectProject/data.xyz/subset_xyz/')
+cartellaXYZPath = Path('/home/gabro/grapheneDetectProject/data.xyz/subset_xyz')
+cartellaDataSet = Path('/home/gabro/GrapheDetectProject/data_s')
 
 # #generazione immagine singola
 # nomeFileProva = "graphene_67.xyz"   #inserire file .xyz di esempio 
@@ -18,7 +20,7 @@ cartellaXYZPath = Path('/home/gabro/grapheneDetectProject/data.xyz/subset_xyz/')
 # Utils.generate_bonds_png(path_xyz_prova, rootPath)
 
 
-#ciclo delle prime n immagini 
+#generazione di tutte le immagini
 i=0
 for nome_file_xyz in os.listdir(cartellaXYZPath):
     if(i>=100):
@@ -30,6 +32,17 @@ for nome_file_xyz in os.listdir(cartellaXYZPath):
     #chiamo la funzione che tarsforma da .xyz a .png specificando la risoluzione
     Utils.generate_bonds_png(path_file_xyz, cartellaImmaginiPath, 320)
     i = i+1
+
+
+# training_data, testing_data = train_test_split(df, test_size=0.2, random_state=25)
+
+# print(f"No. of training examples: {training_data.shape[0]}")
+# print(f"No. of testing examples: {testing_data.shape[0]}")
+
+# # No. of training examples: 120
+# # No. of testing examples: 30
+
+
 
 
 

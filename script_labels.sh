@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#sostituisce la prima lettera di ogni riga con 0
+#sostituisce la prima lettera di ogni riga con 0, (serve a risolvere il problema delle classi di LabelImg)
 cd "data/labels"
 #echo "$PWD"
 ls
