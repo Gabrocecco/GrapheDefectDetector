@@ -9,9 +9,10 @@ except Exception as e:
     print("Some module are missing {}".format(e))
 
 #dichiarazione path utili
-cartellaImmaginiPath = Path('/home/gabro/grapheneDetectProject/data/images')
-rootPath = Path('/home/gabro/grapheneDetectProject')
-cartellaXYZPath = Path('/home/gabro/grapheneDetectProject/data.xyz/subset_xyz')
+# cartellaImmaginiPath = Path('/home/gabro/GrapheDetectProject/data/images')
+cartellaImmaginiPath = Path('/home/gabro/GrapheDetectProject/data300')
+rootPath = Path('/home/gabro/GrapheDetectProject')
+cartellaXYZPath = Path('/home/gabro/GrapheDetectProject/data.xyz/subset_xyz')
 cartellaDataSet = Path('/home/gabro/GrapheDetectProject/data_s')
 
 # #generazione immagine singola
@@ -21,9 +22,10 @@ cartellaDataSet = Path('/home/gabro/GrapheDetectProject/data_s')
 
 
 #generazione di tutte le immagini
+NUM_IMM = 300
 i=0
 for nome_file_xyz in os.listdir(cartellaXYZPath):
-    if(i>=100):
+    if(i>=NUM_IMM):
         break
     #recupero il path di ogni immagine 
     path_file_xyz = Path.joinpath(cartellaXYZPath, nome_file_xyz)

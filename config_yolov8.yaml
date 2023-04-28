@@ -1,7 +1,7 @@
 
-path: /home/gabro/grapheneDetectProject/data/  #dataset root dir 
-train: images/  #train dataset 
-val: images/  #valdiation dataset 
+path: /home/gabro/grapheneDetectProject/dataset_yolo/  #dataset root dir 
+train: train/images/  #train dataset 
+val: test/images/  #valdiation dataset 
 
 # Classes
 names:
