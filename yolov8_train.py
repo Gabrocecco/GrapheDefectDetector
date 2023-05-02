@@ -35,15 +35,15 @@ boxes = results[0].boxes
 #devo trasformare xy (alto sx), xy (alto dx) in [start_row:end_row, start_col:end_col]
 print(boxes[0].xyxy)    #posizione angolo in alto a sx e in basso a dx in pixel
 array = torch.Tensor.numpy(boxes[0].xyxy)
-print(array.size)
+# print(array.size)
 x1 = math.ceil(array[0,0])
 y1 = math.ceil(array[0,1])
 x2 = math.floor(array[0,2])
 y2 = math.floor(array[0,3])
-print(x1)
-print(y1)
-print(x2)
-print(y2)
+# print(x1)
+# print(y1)
+# print(x2)
+# print(y2)
 
 # res_plotted = results[0].plot(labels = False, line_width = 1)
 # plt.imshow(res_plotted)
