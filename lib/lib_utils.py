@@ -183,7 +183,7 @@ class Utils:
     #prende il path 
     @staticmethod
     def from_xyz_to_png(pathXYZ: Path, pathPNG: Path, NUM_IMM: int):
-        
+
         #generazione di tutte le immagini
         i=0
         for nome_file_xyz in os.listdir(pathXYZ):
@@ -196,5 +196,6 @@ class Utils:
             #chiamo la funzione che tarsforma da .xyz a .png specificando la risoluzione
             Utils.generate_bonds_png(path_file_xyz, pathPNG, 320)
             i = i+1
+        print(NUM_IMM)
 
 

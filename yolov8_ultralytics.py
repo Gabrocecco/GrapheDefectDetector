@@ -3,14 +3,14 @@ from lib.lib_utils import Utils
 from pathlib import Path
 
 #trasformazione .xyz to .png 
-Utils.from_xyz_to_png(
-    Path('/home/gabro/GrapheDetectProject/data.xyz/subset_xyz'), 
-    Path('/home/gabro/GrapheDetectProject/immagini_prova_from_xyz_to_png'), 
-    10)
+# Utils.from_xyz_to_png(
+#     Path('/home/gabro/GrapheDetectProject/data.xyz/subset_xyz'), 
+#     Path('/home/gabro/GrapheDetectProject/dataset_imm_300'), 
+#     100)
 
 #divisione del dataset in train/ test/
 #inserire percorso dataset da dividere e percentuale del test 
-Utils.split_dataset('/home/gabro/GrapheDetectProject/data_copy_test_split_dataset/', 0.5)   
+Utils.split_dataset('/home/gabro/GrapheDetectProject/data_yolo_new/', 0.2)   
 
 # Load a model
 # model = YOLO("yolov8n.yaml")  # build a new model from scratch
