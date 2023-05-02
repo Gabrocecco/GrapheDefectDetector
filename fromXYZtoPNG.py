@@ -36,18 +36,6 @@ for nome_file_xyz in os.listdir(cartellaXYZPath):
     i = i+1
 
 
-# training_data, testing_data = train_test_split(df, test_size=0.2, random_state=25)
-
-# print(f"No. of training examples: {training_data.shape[0]}")
-# print(f"No. of testing examples: {testing_data.shape[0]}")
-
-# # No. of training examples: 120
-# # No. of testing examples: 30
-
-
-
-
-
 #prova con altri file non di grafene per vedere i colori di più atomi
 # file_xyz = Path('/home/gabro/grapheneDetectProject/data.xyz/subset_xyz/graphene_67.xyz')
 # cartellaImmaginiPath = Path('/home/gabro/grapheneDetectProject/images2')

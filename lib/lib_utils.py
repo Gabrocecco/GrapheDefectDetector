@@ -26,8 +26,10 @@ try:
     import os
     import cv2
     import skimage.exposure
+    
+    #import per split_dataset
+    import glob
 except Exception as e:
-
     print("Some module are missing {}".format(e))
 
 class Utils:
@@ -134,242 +136,65 @@ class Utils:
         return new_image
     
 
+    #prende la posizione del dataset dove ci sono tutte le immagini e i labels e la percentuale di divisione,
+    #crea due cartelle train/ e test/ all'interno e le divide secondo la percentuale data 
+    @staticmethod
+    def split_dataset(pathData: str, testPerc: int = 0.2):
+
+        print(pathData)
+        filelist = glob.glob(pathData+'*.txt') #prendo la lista di tutti i path delle labels nel dataset
+        test = random.sample(filelist, int(len(filelist)*testPerc))    #prendo il 20% dei path dei labels
+        output_path_test = pathData+"test/"
+        output_path_train = pathData+"train/"
+        if not os.path.exists(output_path_test): #creo la cartella test se non esiste ancora
+            os.makedirs(output_path_test)
+        if not os.path.exists(output_path_train): #creo la cartella train se non esiste ancora
+            os.makedirs(output_path_train)
+
+        for file in test:  #scorro tutte le labels di test
+            txtpath = file
+            impath = file[:-4] + '.png' #costruisco i rispettivi path delle immagini 
+            out_text = os.path.join(output_path_test, os.path.basename(txtpath)) #questi ultime due liste di path sono i path finali nelle due cartelle nuove 
+            out_image = os.path.join(output_path_test, os.path.basename(impath))
+            print(txtpath,impath,out_text,out_image)
+            os.system('mv ' + txtpath + ' ' + out_text)
+            os.system('mv ' + impath + ' ' + out_image)
+
+        #sposto tutto il rimanente in una cartella train 
+        for filename in os.listdir(pathData):
+            f = os.path.join(pathData, filename)
+            # checking if it is a file
+            if os.path.isfile(f):
+                os.system('mv ' + f + ' ' + output_path_train)
 
 
+            #dichiarazione path utili
+            # cartellaImmaginiPath = Path('/home/gabro/GrapheDetectProject/data/images')
+            cartellaImmaginiPath = Path('/home/gabro/GrapheDetectProject/data300')
+            rootPath = Path('/home/gabro/GrapheDetectProject')
+            cartellaXYZPath = Path('/home/gabro/GrapheDetectProject/data.xyz/subset_xyz')
+            cartellaDataSet = Path('/home/gabro/GrapheDetectProject/data_s')
+
+            # #generazione immagine singola
+            # nomeFileProva = "graphene_67.xyz"   #inserire file .xyz di esempio 
+            # path_xyz_prova = Path.joinpath(cartellaXYZPath, nomeFileProva)
+            # Utils.generate_bonds_png(path_xyz_prova, rootPath)
+
+    #prende il path 
+    @staticmethod
+    def from_xyz_to_png(pathXYZ: Path, pathPNG: Path, NUM_IMM: int):
+        
+        #generazione di tutte le immagini
+        i=0
+        for nome_file_xyz in os.listdir(pathXYZ):
+            if(i>=NUM_IMM):
+                break
+            #recupero il path di ogni immagine 
+            path_file_xyz = Path.joinpath(pathXYZ, nome_file_xyz)
+            #print(path_file_xyz)
+            #print(nome_file_xyz)
+            #chiamo la funzione che tarsforma da .xyz a .png specificando la risoluzione
+            Utils.generate_bonds_png(path_file_xyz, pathPNG, 320)
+            i = i+1
 
 
-    # @staticmethod
-    # def read_from_xyz_file(spath: Path):
-    #     """Read xyz files and return lists of x,y,z coordinates and atoms"""
-
-    #     X = []
-    #     Y = []
-    #     Z = []
-    #     atoms = []
-
-    #     with open(str(spath), "r") as f:    #apro il file .xyz
-
-    #         for line in f:      #itero le righe del file, splittandole 
-    #             l = line.split()
-    #             if len(l) == 4:
-    #                 X.append(float(l[1]))
-    #                 Y.append(float(l[2]))
-    #                 Z.append(float(l[3]))
-    #                 atoms.append(str(l[0]))
-
-    #     X = np.asarray(X)
-    #     Y = np.asarray(Y)
-    #     Z = np.asarray(Z)
-
-    #     return X, Y, Z, atoms   #ritorna 4 aray rappresentanti X,Y,Z e atom
-    
-    # @staticmethod
-    # def crop_image(image: Image, name: str = None, dpath: Path = None) -> Image:
-
-    #     image_data = np.asarray(image)
-    #     if len(image_data.shape) == 2:
-    #         image_data_bw = image_data
-    #     else:
-    #         image_data_bw = image_data.max(axis=2)
-    #     non_empty_columns = np.where(image_data_bw.max(axis=0) > 0)[0]
-    #     non_empty_rows = np.where(image_data_bw.max(axis=1) > 0)[0]
-    #     cropBox = (
-    #         min(non_empty_rows),
-    #         max(non_empty_rows),
-    #         min(non_empty_columns),
-    #         max(non_empty_columns),
-    #     )
-
-    #     if len(image_data.shape) == 2:
-    #         image_data_new = image_data[
-    #             cropBox[0] : cropBox[1] + 1, cropBox[2] : cropBox[3] + 1
-    #         ]
-    #     else:
-    #         image_data_new = image_data[
-    #             cropBox[0] : cropBox[1] + 1, cropBox[2] : cropBox[3] + 1, :
-    #         ]
-
-    #     new_image = Image.fromarray(image_data_new)
-    #     if dpath is not None:
-    #         new_image.save(dpath.joinpath(name))
-
-    #     return new_image
-    
-    # @staticmethod
-    # def generate_png(
-    #     spath: Path,
-    #     dpath: Path,
-    #     resolution=320,
-    #     z_relative=False,
-    #     single_channel_images=False,
-    # ):
-    #     """Generate a .npy matrix starting from lists of x,y,z coordinates"""
-
-    #     X, Y, Z, atoms = Utils.read_from_xyz_file(spath)    #recupero le coordinate dalla funzione read_from_xyz_file
-
-    #     if z_relative: #se sto lavorando con la coordinata z relativa, i relativi massimi e minimi saranno i max e min dell'array di valori
-    #         z_max = np.max(Z)
-    #         z_min = np.min(Z)
-
-    #         path = spath.parent.joinpath("max_min_coordinates.txt")
-
-    #         x = np.loadtxt(str(path))
-
-    #         x_max = x[0][0]
-    #         x_min = x[1][0]
-
-    #         y_max = x[0][1]
-    #         y_min = x[1][1]
-
-    #         #calcolo la risoluzione dell'immagine partendo dai valori massimi ottenuti prima 
-    #         resolution = round(
-    #             4
-    #             * (
-    #                 5
-    #                 + np.max(
-    #                     [np.abs(x_max), np.abs(x_min), np.abs(y_max), np.abs(y_min)]
-    #                 )
-    #             )
-    #         )
-    #     else:
-    #         path = spath.parent.joinpath("max_min_coordinates.txt")
-
-    #         x = np.loadtxt(str(path))   #prendo dal file max_min_coordinates.txt i massimi e minimi valori.
-
-    #         x_max = x[0][0]
-    #         x_min = x[1][0]
-
-    #         y_max = x[0][1]
-    #         y_min = x[1][1]
-
-    #         z_max = x[0][2]
-    #         z_min = x[1][2]
-
-    #         resolution = round(
-    #             4
-    #             * (
-    #                 5
-    #                 + np.max(
-    #                     [np.abs(x_max), np.abs(x_min), np.abs(y_max), np.abs(y_min)]
-    #                 )
-    #             )
-    #         )
-    #     #ho 3 matrici, una sopra l'altra che rappresentano le posizioni dei 3 atomi di interesse.
-    #     C = np.zeros((resolution, resolution))
-    #     O = np.zeros((resolution, resolution))
-    #     H = np.zeros((resolution, resolution))
-
-    #     z_norm = lambda x: (x - z_min) / (z_max - z_min)
-
-    #     C_only = True
-
-    #     for i in range(len(X)):
-    #         if atoms[i] == "C":
-    #             x_coord = int(round(X[i] * 2) + resolution / 2)
-    #             y_coord = int(round(Y[i] * 2) + resolution / 2)
-    #             if C[y_coord, x_coord] < z_norm(Z[i]):
-    #                 C[y_coord, x_coord] = z_norm(Z[i])
-    #         elif atoms[i] == "O":
-    #             C_only = False
-    #             x_coord = int(round(X[i] * 2) + resolution / 2)
-    #             y_coord = int(round(Y[i] * 2) + resolution / 2)
-    #             if O[y_coord, x_coord] < z_norm(Z[i]):
-    #                 O[y_coord, x_coord] = z_norm(Z[i])
-    #         elif atoms[i] == "H":
-    #             C_only = False
-    #             x_coord = int(round(X[i] * 2) + resolution / 2)
-    #             y_coord = int(round(Y[i] * 2) + resolution / 2)
-    #             if H[y_coord, x_coord] < z_norm(Z[i]):
-    #                 H[y_coord, x_coord] = z_norm(Z[i])
-
-    #     name = spath.stem
-
-    #     if single_channel_images:
-    #         C = (C * 255.0).astype(np.uint8)
-    #         O = (O * 255.0).astype(np.uint8)
-    #         H = (H * 255.0).astype(np.uint8)
-
-    #         image_C = Image.fromarray(C)
-    #         Utils.crop_image(image_C, name + "_C.png", dpath)
-    #         image_O = Image.fromarray(O)
-    #         Utils.crop_image(image_O, name + "_O.png", dpath)
-    #         image_H = Image.fromarray(H)
-    #         Utils.crop_image(image_H, name + "_H.png", dpath)
-
-    #     else:
-    #         if C_only:
-    #             Matrix = C.copy()
-    #         else:
-    #             Matrix = np.stack((C, O, H), axis=2)
-    #         Matrix = (Matrix * 255.0).astype(np.uint8)
-    #         # Matrix = np.flip(Matrix, 0)
-
-    #         image = Image.fromarray(Matrix)
-    #         Utils.crop_image(image, name + ".png", dpath)
-
-
-    # @staticmethod
-    # def dataset_max_and_min(spath: Path, dpath: Path = None) -> list:
-    #     """
-    #     This static method returns a list of the maximum and minimum values for each coordinate given a folder of .xyz files. It takes two parameters,
-    #     spath (Path) and dpath (Path), with dpath being optional. It creates two lists, MAX and MIN, which are initialized to [0, 0, 0].
-    #     It then iterates through the files in the spath directory and checks if each file is an .xyz file. If it is, it calls the find_max_and_min() method
-    #     from Utils to get the max and min values for that file. It then compares these values to MAX and MIN respectively to update them if necessary.
-    #     Finally, if dpath is not None, it saves the MAX and MIN lists as a text file in the dpath directory. Otherwise it just prints out MAX and MIN.
-    #     The method returns both MAX and MIN as a list.
-    #     """
-    #     """Return a list of Max and Min for each coordinate, given a folder of .xyz files"""
-
-    #     MAX = [0, 0, 0]
-    #     MIN = [0, 0, 0]
-
-    #     max = []
-    #     min = []
-
-    #     for file in spath.iterdir():
-    #         if file.suffix == ".xyz":
-    #             max, min = Utils.find_max_and_min(file)
-    #             if max[0] > MAX[0]:
-    #                 MAX[0] = max[0]
-    #             if min[0] < MIN[0]:
-    #                 MIN[0] = min[0]
-    #             if max[1] > MAX[1]:
-    #                 MAX[1] = max[1]
-    #             if min[1] < MIN[1]:
-    #                 MIN[1] = min[1]
-    #             if max[2] > MAX[2]:
-    #                 MAX[2] = max[2]
-    #             if min[2] < MIN[2]:
-    #                 MIN[2] = min[2]
-
-    #     if dpath is not None:
-    #         np.savetxt(dpath.joinpath("max_min_coordinates.txt"), [MAX, MIN])
-    #     else:
-    #         print([MAX, MIN])
-
-    #     return MAX, MIN
-
-    # @staticmethod
-    # def find_max_and_min(spath: Path):
-    #     """Return a list of Max and Min for each coordinate, given a single .xyz file"""
-
-    #     X = []
-    #     Y = []
-    #     Z = []
-
-    #     with open(str(spath), "r") as f:
-    #         for line in f:
-    #             l = line.split()
-    #             if len(l) == 4:
-    #                 X.append(float(l[1]))
-    #                 Y.append(float(l[2]))
-    #                 Z.append(float(l[3]))
-
-    #     X = np.asarray(X)
-    #     Y = np.asarray(Y)
-    #     Z = np.asarray(Z)
-
-    #     max = [np.max(X), np.max(Y), np.max(Z)]
-    #     min = [np.min(X), np.min(Y), np.min(Z)]
-
-    #     return max, min
