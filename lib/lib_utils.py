@@ -19,7 +19,6 @@ try:
     #import yaml
     #from sklearn.model_selection import StratifiedShuffleSplit, train_test_split
     #from scipy.spatial.distance import pdist
-
     #import per generate_bonds_png
     from chemfiles import Trajectory    
     from PIL import Image, ImageDraw, ImageFilter
@@ -27,7 +26,6 @@ try:
     import cv2
     import skimage.exposure
     import torch as Torch 
-    
     #import per split_dataset
     import glob
 except Exception as e:
@@ -200,8 +198,7 @@ class Utils:
         print(NUM_IMM)
 
     #prende una cartella di immagini e una cartella di uscita dove deposita tutti i difetti croppati 
-    @staticmethod
-    def crop_fromFolder(cartellaImm: str, cartellaCrop: str, model):
+    def crop_from_folder(cartellaImm: str, cartellaCrop: str, model):
         #prende una cartella di immagini su cui fare detection dei difetti,
         #deposita su una cartella i difetti croppati 
 
@@ -256,7 +253,6 @@ class Utils:
                 index = index+1
     
     #dalla cartella cropped 
-    @staticmethod
     def from_crops_to_thresh(pathImmagini: str):
 
         pathImmagini = "/home/gabro/GrapheDetectProject/cartellaCrop/"
