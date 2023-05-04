@@ -259,8 +259,8 @@ class Test:
         # Create dictionary of shape features
         num_pixels = img.shape[0] * img.shape[1]
         shape_features = {
-            "area": area / num_pixels,
-            # "area": area,
+            #  "area": area / num_pixels,
+            "area": area,   #modifica per avere l'area assoluta 
             "perimeter": perimeter / num_pixels,
             "circularity": circularity,
             "solidity": solidity,
