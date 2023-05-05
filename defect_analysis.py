@@ -269,11 +269,6 @@ class Test:
         # Filter contours based on area
         contours = [contour for contour in contours if cv2.contourArea(contour) > 100]
 
-        # for contour in contours:
-        #     cv2.drawContours(img, contour, -1, (0, 255, 0), 3)
-        #     plt.figure()
-        #     plt.imshow(img)
-
         # Get largest contour by area
         largest_contour = max(contours, key=cv2.contourArea)
 
