@@ -9,6 +9,7 @@ try:
     from mahotas.features import haralick
     from matplotlib import pyplot as plt
     import matplotlib.image as mpimg
+    import os
 except Exception as e:
     print(f"Some module are missing for {__file__}: {e}\n")
 
@@ -239,7 +240,81 @@ class Test:
     #     return color_features
 
 
-    def extract_shape_features(
+    # def extract_shape_features(
+    #     image: Path | np.ndarray,
+    #     mask: Path | np.ndarray = None,
+    #     dest_path: Path | None = None,
+    # ) -> dict:
+    #     # Load image as grayscale
+    #     if isinstance(image, Path):
+    #         img = cv2.imread(str(image), cv2.IMREAD_GRAYSCALE)
+    #     # else:
+    #     #     img = image.copy()    #da errore anche se non ci entra 
+    #     # img = contrast_enhancement(img)  # per migliorare la detection dei contorni 
+
+    #     # if mask is not None:
+    #     #     if isinstance(mask, Path):
+    #     #         mask_img = cv2.imread(str(mask))
+    #     #         mask_img = cv2.cvtColor(mask_img, cv2.COLOR_BGR2GRAY)
+    #     #     else:
+    #     #         mask_img = mask.copy()
+
+    #     #     #img = crop_melanoma(img, mask_img)
+
+    #     # Threshold image to create binary mask
+    #     _, mask = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+
+    #     # Find contours in binary mask
+    #     contours, _ = cv2.findContours(mask, cv2.RETR_LIST, cv2.CHAIN_APPROX_TC89_L1)
+
+    #     # Filter contours based on area
+    #     contours = [contour for contour in contours if cv2.contourArea(contour) > 100]
+
+    #     # Get largest contour by area
+    #     largest_contour = max(contours, key=cv2.contourArea)
+
+    #     # Compute shape features
+    #     area = cv2.contourArea(largest_contour)
+    #     perimeter = cv2.arcLength(largest_contour, True)
+    #     circularity = 4 * np.pi * area / (perimeter**2)
+    #     solidity = (
+    #         cv2.contourArea(largest_contour)
+    #         / cv2.convexHull(largest_contour, returnPoints=False).size
+    #     )
+
+    #     compactness = perimeter**2 / area
+
+    #     _, (diam_x, diam_y), _ = cv2.minAreaRect(largest_contour)
+    #     feret_diameter = max(diam_x, diam_y)
+
+    #     if diam_x < diam_y:
+    #         diam_x, diam_y = diam_y, diam_x
+
+    #     eccentricity = np.sqrt(1 - (diam_y / diam_x) ** 2)
+        
+    #     if dest_path is not None:
+    #         # Draw largest contour on input image
+    #         img_with_contour = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+    #         cv2.drawContours(img_with_contour, [largest_contour], -1, (0, 0, 255), 1)
+    #         cv2.imwrite(str(dest_path), img_with_contour)
+
+    #     # Create dictionary of shape features
+    #     num_pixels = img.shape[0] * img.shape[1]
+    #     shape_features = {
+    #         "area": area / num_pixels,
+    #         # "area": area,   #modifica per avere l'area assoluta 
+    #         #"number_of_contours": len(contours),
+    #         "perimeter": perimeter / num_pixels,
+    #         "circularity": circularity,
+    #         "solidity": solidity,
+    #         "compactness": compactness / num_pixels,
+    #         "feret_diameter": feret_diameter / np.sqrt(num_pixels),
+    #         "eccentricity": eccentricity,
+    #     }
+
+    #     return shape_features
+    
+    def extract_shape_features_edited(
         image: Path | np.ndarray,
         mask: Path | np.ndarray = None,
         dest_path: Path | None = None,
@@ -261,19 +336,24 @@ class Test:
         #     #img = crop_melanoma(img, mask_img)
 
         # Threshold image to create binary mask
-        _, mask = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+        # _, mask = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+        _, mask = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
         # Find contours in binary mask
         contours, _ = cv2.findContours(mask, cv2.RETR_LIST, cv2.CHAIN_APPROX_TC89_L1)
 
         # Filter contours based on area
-        contours = [contour for contour in contours if cv2.contourArea(contour) > 100]
+        contours = [contour for contour in contours if cv2.contourArea(contour) > 1]  #considera solo contorni con area minima 100
 
         # Get largest contour by area
-        largest_contour = max(contours, key=cv2.contourArea)
+        largest_contour = max(contours, key=cv2.contourArea)    #prende il contorno più grande 
 
         # Compute shape features
         area = cv2.contourArea(largest_contour)
+        # area = 0
+        # for contour in contours:
+        #     area = area + cv2.contourArea(contour)
+
         perimeter = cv2.arcLength(largest_contour, True)
         circularity = 4 * np.pi * area / (perimeter**2)
         solidity = (
@@ -294,15 +374,20 @@ class Test:
         if dest_path is not None:
             # Draw largest contour on input image
             img_with_contour = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
-            cv2.drawContours(img_with_contour, [largest_contour], -1, (0, 0, 255), 1)
+            # cv2.drawContours(img_with_contour, [largest_contour], -1, (0, 0, 255), 1)
+            cv2.drawContours(img_with_contour, contours, -1, (0, 0, 255), 1)    #disegno tutti i contorni
             cv2.imwrite(str(dest_path), img_with_contour)
 
         # Create dictionary of shape features
         num_pixels = img.shape[0] * img.shape[1]
         shape_features = {
-            "area": area / num_pixels,
-            # "area": area,   #modifica per avere l'area assoluta 
-            "perimeter": perimeter / num_pixels,
+            "nome_imm": os.path.basename(image),
+            "area_div_px": area / num_pixels,
+            "area_px": area,   #modifica per avere l'area assoluta 
+            "num_pixels": num_pixels,
+            "number_of_contours": len(contours),
+            # "perimeter": perimeter / num_pixels,
+            "perimeter_px": perimeter,
             "circularity": circularity,
             "solidity": solidity,
             "compactness": compactness / num_pixels,
