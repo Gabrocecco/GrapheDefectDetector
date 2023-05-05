@@ -7,15 +7,56 @@ try:
     from skimage.feature import hog
     from scipy.fftpack import fft2, fftshift
     from mahotas.features import haralick
-
+    from matplotlib import pyplot as plt
+    import matplotlib.image as mpimg
 except Exception as e:
     print(f"Some module are missing for {__file__}: {e}\n")
 
 
 IMAGE_EXTENSIONS = (".jpg", ".png", ".jpeg")
 
+def contrast_enhancement(image: Path | np.ndarray, dest_path: Path | None = None):
+    # Load the image
+    if isinstance(image, Path):
+        img = cv2.imread(str(image), 0)
+    else:
+        img = image.copy()
+        if len(img.shape) == 3:
+            img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # Apply histogram equalization
+    equ = cv2.equalizeHist(img)
+
+    if dest_path is not None:
+        cv2.imwrite(str(dest_path), equ)
+    else:
+        return equ
+
+
+        def crop_melanoma(
+            image: np.ndarray,
+            mask: np.ndarray,
+        ) -> np.ndarray:
+            non_empty_columns = np.where(mask.max(axis=0) > 0)[0]
+            non_empty_rows = np.where(mask.max(axis=1) > 0)[0]
+            cropBox = (
+                min(non_empty_rows),
+                max(non_empty_rows),
+                min(non_empty_columns),
+                max(non_empty_columns),
+            )
+
+            if len(image.shape) == 3:
+                crop = image[cropBox[0] : cropBox[1] + 1, cropBox[2] : cropBox[3] + 1, :]
+            elif len(image.shape) == 2:
+                crop = image[cropBox[0] : cropBox[1] + 1, cropBox[2] : cropBox[3] + 1]
+            else:
+                raise Exception(f"Wrong image shape for: {image}")
+
+            return crop
 
 class Test:
+    
     def test_melanoma_mask(img: Path, mask: Path, dpath: Path, gray: bool = False):
         img = cv2.imread(str(img))
         mask = cv2.imread(str(mask))
@@ -207,7 +248,7 @@ class Test:
         if isinstance(image, Path):
             img = cv2.imread(str(image), cv2.IMREAD_GRAYSCALE)
         # else:
-            # img = image.copy()    #da errore anche se non ci entra 
+        #     img = image.copy()    #da errore anche se non ci entra 
         # img = contrast_enhancement(img)  # per migliorare la detection dei contorni 
 
         # if mask is not None:
@@ -217,7 +258,7 @@ class Test:
         #     else:
         #         mask_img = mask.copy()
 
-        #     img = crop_melanoma(img, mask_img)
+        #     #img = crop_melanoma(img, mask_img)
 
         # Threshold image to create binary mask
         _, mask = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
@@ -227,6 +268,11 @@ class Test:
 
         # Filter contours based on area
         contours = [contour for contour in contours if cv2.contourArea(contour) > 100]
+
+        # for contour in contours:
+        #     cv2.drawContours(img, contour, -1, (0, 255, 0), 3)
+        #     plt.figure()
+        #     plt.imshow(img)
 
         # Get largest contour by area
         largest_contour = max(contours, key=cv2.contourArea)
@@ -249,18 +295,18 @@ class Test:
             diam_x, diam_y = diam_y, diam_x
 
         eccentricity = np.sqrt(1 - (diam_y / diam_x) ** 2)
-
+        
         if dest_path is not None:
             # Draw largest contour on input image
             img_with_contour = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
-            cv2.drawContours(img_with_contour, [largest_contour], -1, (0, 0, 255), 3)
+            cv2.drawContours(img_with_contour, [largest_contour], -1, (0, 0, 255), 1)
             cv2.imwrite(str(dest_path), img_with_contour)
 
         # Create dictionary of shape features
         num_pixels = img.shape[0] * img.shape[1]
         shape_features = {
-            #  "area": area / num_pixels,
-            "area": area,   #modifica per avere l'area assoluta 
+            "area": area / num_pixels,
+            # "area": area,   #modifica per avere l'area assoluta 
             "perimeter": perimeter / num_pixels,
             "circularity": circularity,
             "solidity": solidity,
@@ -516,45 +562,7 @@ class Test:
         return haralick_dict
 
 
-    def contrast_enhancement(image: Path | np.ndarray, dest_path: Path | None = None):
-        # Load the image
-        if isinstance(image, Path):
-            img = cv2.imread(str(image), 0)
-        else:
-            img = image.copy()
-            if len(img.shape) == 3:
-                img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-        # Apply histogram equalization
-        equ = cv2.equalizeHist(img)
-
-        if dest_path is not None:
-            cv2.imwrite(str(dest_path), equ)
-        else:
-            return equ
-
-
-    def crop_melanoma(
-        image: np.ndarray,
-        mask: np.ndarray,
-    ) -> np.ndarray:
-        non_empty_columns = np.where(mask.max(axis=0) > 0)[0]
-        non_empty_rows = np.where(mask.max(axis=1) > 0)[0]
-        cropBox = (
-            min(non_empty_rows),
-            max(non_empty_rows),
-            min(non_empty_columns),
-            max(non_empty_columns),
-        )
-
-        if len(image.shape) == 3:
-            crop = image[cropBox[0] : cropBox[1] + 1, cropBox[2] : cropBox[3] + 1, :]
-        elif len(image.shape) == 2:
-            crop = image[cropBox[0] : cropBox[1] + 1, cropBox[2] : cropBox[3] + 1]
-        else:
-            raise Exception(f"Wrong image shape for: {image}")
-
-        return crop
+    
 
 
     if __name__ == "__main__":
