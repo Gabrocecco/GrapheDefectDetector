@@ -1,15 +1,16 @@
-from ultralytics import YOLO
-from lib.lib_utils import Utils 
 from lib_fetaure_analysis import Features
 from defect_analysis import Test
 from pathlib import Path
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
-import cv2
 import torch as Torch
-import math
-import os
 import pandas as pd
+import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+import seaborn as sns
+import seaborn.objects as so
 
 pathCartellaTresh = Path('/home/gabro/GrapheDetectProject/cartellaTrash')
 pathCartellaContours = Path('/home/gabro/GrapheDetectProject/contours')
@@ -23,5 +24,20 @@ for shape in shapes:
 df = pd.DataFrame.from_records(shapes)
 df.to_csv('/home/gabro/GrapheDetectProject/dataframe.csv')
 print(df)
+
+# # Apply the default theme
+# sns.set_theme()
+
+# # Load an example dataset
+# tips = sns.load_dataset("tips")
+
+# # Create a visualization
+# sns.relplot(
+#     data=tips,
+#     x="total_bill", y="tip", col="time",
+#     hue="smoker", style="smoker", size="size",
+# )
+
+# plt.show(sns)
 
 
