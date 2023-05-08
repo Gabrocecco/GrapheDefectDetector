@@ -17,7 +17,7 @@ except Exception as e:
 
 
 class Features:
-    #prende la cartella dove ci sono tresh 
+    #prende la cartella dove ci sono tresh, produce le immagini dei contorni su dpath quindi ne calcola le fatures e le ritorna in una list di dict
     def from_thresh_to_contours_print_features(spath: Path, dpath: Path):
 
         shapes = []
@@ -56,5 +56,5 @@ class Features:
             # print()
             # print('-------------------------------------------------------------------------------------------------------------------------')
             shapes.append(shape)    #aggiungo il dizionario dell'imm corrente a shapes
-        return shapes
+        return shapes   #ritorno la lista di dict con le features grafiche dei campioni 
     

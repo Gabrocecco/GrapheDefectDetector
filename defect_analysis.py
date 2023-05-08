@@ -378,14 +378,18 @@ class Test:
             cv2.drawContours(img_with_contour, contours, -1, (0, 0, 255), 1)    #disegno tutti i contorni
             cv2.imwrite(str(dest_path), img_with_contour)
 
+        basenameImm = os.path.basename(image)
+        newName = basenameImm.split("-")[1]
+        newName = newName.split("_bonds")[0]        
+
         # Create dictionary of shape features
         num_pixels = img.shape[0] * img.shape[1]
         shape_features = {
-            "nome_imm": os.path.basename(image),
-            "area_div_px": area / num_pixels,
+            "nome_imm": newName,
+            #"area_div_px": area / num_pixels,
             "area_px": area,   #modifica per avere l'area assoluta 
             "num_pixels": num_pixels,
-            "number_of_contours": len(contours),
+            #"number_of_contours": len(contours),
             # "perimeter": perimeter / num_pixels,
             "perimeter_px": perimeter,
             "circularity": circularity,
