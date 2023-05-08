@@ -379,8 +379,9 @@ class Test:
             cv2.imwrite(str(dest_path), img_with_contour)
 
         basenameImm = os.path.basename(image)
-        newName = basenameImm.split("-")[1]
-        newName = newName.split("_bonds")[0]        
+        # print(basenameImm)
+        # newName = basenameImm.split("-")[1]
+        newName = basenameImm.split("_bonds")[0]        
 
         # Create dictionary of shape features
         num_pixels = img.shape[0] * img.shape[1]
