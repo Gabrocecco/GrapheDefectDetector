@@ -18,8 +18,8 @@ except Exception as e:
 
 IMAGE_EXTENSIONS = (".jpg", ".png", ".jpeg")
 
-spath = Path('/home/gabro/GrapheDetectProject/cartellaTrash')   #cartella dove sono contenuti tutti i trash 
-dpath = Path('/home/gabro/GrapheDetectProject/contours')   #cartella dove sono contenuti tutti i trash 
+spath = Path('/home/gabro/GrapheDetectProject/cartellaTrashProva')   #cartella dove sono contenuti tutti i trash 
+dpath = Path('/home/gabro/GrapheDetectProject/contoursProva')   #cartella dove sono contenuti tutti i trash 
 
 
 #defect analysis selected images
@@ -45,7 +45,7 @@ for imm in images:  #itero sui apth delle immagini
     newName = str(nameImm).removesuffix('.png') + "countour_" + ".png"    #name of countour image produced
     dpathName = os.path.join(dpath, newName)
     shape = Test.extract_shape_features_edited(imm, dest_path=dpathName)   #computate shape features 
-    edge = Test.extract_edge_features(imm)
+    # edge = Test.extract_edge_features(imm)
     # texture = Test.extract_texture_features(imm)
     # fourier = Test.extract_fourier_features(imm)
     # haralick = Test.extract_haralick_features(imm)
@@ -60,9 +60,9 @@ for imm in images:  #itero sui apth delle immagini
     print()
 
     #plot contourn image 
-    plotImm = mpimg.imread(str(dpathName))
-    imgplot = plt.imshow(plotImm)
-    plt.show()
+    # plotImm = mpimg.imread(str(dpathName))
+    # imgplot = plt.imshow(plotImm)
+    # plt.show()
 
     # print more propierties 
     # print("Edge features:")

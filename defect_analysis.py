@@ -383,16 +383,42 @@ class Test:
         # newName = basenameImm.split("-")[1]
         newName = basenameImm.split("_bonds")[0]        
 
+        #devo recupearare da /home/gabro/GrapheDetectProject/data.xyz/subset_xyz, il numero di atomi del campione
+        #ovvero il valore numerico nella prima riga 
+        print("Newname: ")
+        print(newName)
+        # shortName = newName.split("-")[1]
+        # print("Shortaname:")
+        # print(shortName)
+
+        #costruisco il nome del file.xyz del tipo /home/gabro/GrapheDetectProject/data.xyz/subset_xyz/graphene_67.xyz
+
+        path_subset = Path("/home/gabro/GrapheDetectProject/data.xyz/subset_xyz/")
+        final_path_xyz =  path_subset.joinpath(newName +".xyz")   #path del file del dataset da cui reperire il numero di atomi 
+        print("Path file .xyz: ")
+        print(final_path_xyz)
+        # Leggo il numero dia tomi dalla prima riga di final_path_xyz
+        with open(final_path_xyz, "r") as file:
+            first_line = file.readline()
+        n_atoms = int(first_line.strip())
+        # Stampare il valore numerico
+        print("Numero atomi:")
+        print(n_atoms)
+        
+        
         # Create dictionary of shape features
         num_pixels = img.shape[0] * img.shape[1]
         shape_features = {
             "nome_imm": newName,
+            "numero_atomi": n_atoms, 
             #"area_div_px": area / num_pixels,
-            "area_px": area,   #modifica per avere l'area assoluta 
+            "area_px": area,   #modifica per avere l'area assoluta
+            "area_px_div_n_atomi": area/n_atoms, 
             "num_pixels": num_pixels,
             #"number_of_contours": len(contours),
             # "perimeter": perimeter / num_pixels,
             "perimeter_px": perimeter,
+            "perimeter_px_div_n_atomi": perimeter/n_atoms, 
             "circularity": circularity,
             "solidity": solidity,
             "compactness": compactness / num_pixels,
