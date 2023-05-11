@@ -343,40 +343,58 @@ class Test:
         contours, _ = cv2.findContours(mask, cv2.RETR_LIST, cv2.CHAIN_APPROX_TC89_L1)
 
         # Filter contours based on area
-        contours = [contour for contour in contours if cv2.contourArea(contour) > 1]  #considera solo contorni con area minima 100
+        contours = [contour for contour in contours if cv2.contourArea(contour) >= 1]  #considera solo contorni con area minima 100
 
         # Get largest contour by area
-        largest_contour = max(contours, key=cv2.contourArea)    #prende il contorno più grande 
+        if contours: 
+            largest_contour = max(contours, key=cv2.contourArea)    #prende il contorno più grande 
+            # Compute shape features
+            area = cv2.contourArea(largest_contour)
+            
+                        # area = 0
+            # for contour in contours:
+            #     area = area + cv2.contourArea(contour)
 
-        # Compute shape features
-        area = cv2.contourArea(largest_contour)
-        # area = 0
-        # for contour in contours:
-        #     area = area + cv2.contourArea(contour)
+            perimeter = cv2.arcLength(largest_contour, True)
+            circularity = 4 * np.pi * area / (perimeter**2)
+            solidity = (
+                cv2.contourArea(largest_contour)
+                / cv2.convexHull(largest_contour, returnPoints=False).size
+            )
 
-        perimeter = cv2.arcLength(largest_contour, True)
-        circularity = 4 * np.pi * area / (perimeter**2)
-        solidity = (
-            cv2.contourArea(largest_contour)
-            / cv2.convexHull(largest_contour, returnPoints=False).size
-        )
+            compactness = perimeter**2 / area
 
-        compactness = perimeter**2 / area
+            _, (diam_x, diam_y), _ = cv2.minAreaRect(largest_contour)
+            feret_diameter = max(diam_x, diam_y)
 
-        _, (diam_x, diam_y), _ = cv2.minAreaRect(largest_contour)
-        feret_diameter = max(diam_x, diam_y)
+            if diam_x < diam_y:
+                diam_x, diam_y = diam_y, diam_x
 
-        if diam_x < diam_y:
-            diam_x, diam_y = diam_y, diam_x
-
-        eccentricity = np.sqrt(1 - (diam_y / diam_x) ** 2)
+            eccentricity = np.sqrt(1 - (diam_y / diam_x) ** 2)
         
-        if dest_path is not None:
-            # Draw largest contour on input image
-            img_with_contour = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
-            # cv2.drawContours(img_with_contour, [largest_contour], -1, (0, 0, 255), 1)
-            cv2.drawContours(img_with_contour, contours, -1, (0, 0, 255), 1)    #disegno tutti i contorni
-            cv2.imwrite(str(dest_path), img_with_contour)
+            if dest_path is not None:
+                # Draw largest contour on input image
+                img_with_contour = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+                # cv2.drawContours(img_with_contour, [largest_contour], -1, (0, 0, 255), 1)
+                cv2.drawContours(img_with_contour, contours, -1, (0, 0, 255), 1)    #disegno tutti i contorni
+                cv2.imwrite(str(dest_path), img_with_contour)
+        else:   #se non ho trovato contorni, setto i parametri a zero e salvo immagine senza contorni
+            area = 0
+            perimeter = 0
+            circularity = 1
+            solidity = 0
+            compactness = 0
+            feret_diameter = 1
+            eccentricity = 0
+            print("ERRORE: Non sono stati trovati contorni in: ")
+            print(image)
+            print("Vengono assunti 0 i parametri.")
+
+            if dest_path is not None:
+                # Draw largest contour on input image
+                img_with_contour = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+                cv2.imwrite(str(dest_path), img_with_contour)
+
 
         basenameImm = os.path.basename(image)
         # print(basenameImm)
@@ -385,8 +403,8 @@ class Test:
 
         #devo recupearare da /home/gabro/GrapheDetectProject/data.xyz/subset_xyz, il numero di atomi del campione
         #ovvero il valore numerico nella prima riga 
-        print("Newname: ")
-        print(newName)
+        # print("Newname: ")
+        # print(newName)
         # shortName = newName.split("-")[1]
         # print("Shortaname:")
         # print(shortName)
@@ -395,17 +413,16 @@ class Test:
 
         path_subset = Path("/home/gabro/GrapheDetectProject/data.xyz/subset_xyz/")
         final_path_xyz =  path_subset.joinpath(newName +".xyz")   #path del file del dataset da cui reperire il numero di atomi 
-        print("Path file .xyz: ")
-        print(final_path_xyz)
+        # print("Path file .xyz: ")
+        # print(final_path_xyz)
         # Leggo il numero dia tomi dalla prima riga di final_path_xyz
         with open(final_path_xyz, "r") as file:
             first_line = file.readline()
         n_atoms = int(first_line.strip())
         # Stampare il valore numerico
-        print("Numero atomi:")
-        print(n_atoms)
-        
-        
+        # print("Numero atomi:")
+        # print(n_atoms)
+            
         # Create dictionary of shape features
         num_pixels = img.shape[0] * img.shape[1]
         shape_features = {
@@ -425,6 +442,7 @@ class Test:
             "feret_diameter": feret_diameter / np.sqrt(num_pixels),
             "eccentricity": eccentricity,
         }
+
 
         return shape_features
 

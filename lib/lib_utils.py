@@ -213,12 +213,12 @@ class Utils:
             results = model(pathImm)  # predict on an image
             boxes = results[0].boxes
             index = 0
-            print(boxes.data.size)
+            # print(boxes.data.size)
             # for box in boxes.data:
             #     print(box.xyxy)
             for box in boxes:
                 #devo trasformare xy (alto sx), xy (alto dx) in [start_row:end_row, start_col:end_col]
-                print(boxes[index].xyxy)    #posizione angolo in alto a sx e in basso a dx in pixel
+                # print(boxes[index].xyxy)    #posizione angolo in alto a sx e in basso a dx in pixel
                 array = Torch.Tensor.numpy(boxes[index].xyxy)
                 # print(array.size)
                 x1 = math.floor(array[0,0])
@@ -233,7 +233,7 @@ class Utils:
 
                 #crop difetto
                 img = cv2.imread(pathImm)
-                print(img.shape) # Print image shape
+                # print(img.shape) # Print image shape
                 # cv2.imshow("original", img)
                 
                 # Cropping an image
