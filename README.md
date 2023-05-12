@@ -1,4 +1,6 @@
-# GrapheDefectDetector
+## GrapheDefectDetector
+
+# R^2 score del predittore: 0.97
 
 1) Trasformazione dataset .xyz in .png ✔️
 2) Object Detection sui difetti ✔️
