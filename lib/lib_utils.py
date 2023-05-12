@@ -197,7 +197,7 @@ class Utils:
             i = i+1
         print(NUM_IMM)
 
-    #prende una cartella di immagini e una cartella di uscita dove deposita tutti i difetti croppati 
+    #prende una cartella di immagini ne fa l'infrenza con YOLO e deposita tutti i difetti croppati nella cartella di uscita  
     def crop_from_folder(cartellaImm: str, cartellaCrop: str, model):
         #prende una cartella di immagini su cui fare detection dei difetti,
         #deposita su una cartella i difetti croppati 
