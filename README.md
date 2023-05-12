@@ -14,6 +14,7 @@ Traformazione campioni in formato .xyz in immagini:
 ![OjectDetect_example](https://github.com/Gabrocecco/GrapheDefectDetector/assets/52239001/bee7ab69-bdf7-4688-8120-2c4c3dc77370)
 
 Trasformazioni sull'immagine per evidenziare l'area:
+
 ![graphene_4734_bonds_cropped_box_2_thresh_](https://github.com/Gabrocecco/GrapheDefectDetector/assets/52239001/f75aaa39-8712-4a2f-a787-7d5da8061b81)
 
 Estrazione fetaures grafiche e correllazione: 
