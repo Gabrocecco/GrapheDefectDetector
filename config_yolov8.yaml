@@ -1,8 +1,0 @@
-#yolo funziona correttamente anche con immagini e labels nella stessa cartella 
-path: /home/gabro/grapheneDetectProject/dataset_yolo/  #dataset root dir 
-train: train/  #train dataset   
-val: test/  #valdiation dataset 
-
-# Classes
-names:
-  0: defect

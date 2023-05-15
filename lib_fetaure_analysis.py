@@ -34,6 +34,7 @@ class Features:
             newName = str(nameImm).removesuffix('.png') + "countour_" + ".png"    #name of countour image produced
             dpathName = os.path.join(dpath, newName)
             shape = Test.extract_shape_features_edited(imm, dest_path=dpathName)   #computate shape features 
+            ## ulteriori feature estraibili 
             # edge = Test.extract_edge_features(imm)
             # texture = Test.extract_texture_features(imm)
             # fourier = Test.extract_fourier_features(imm)
@@ -41,6 +42,7 @@ class Features:
             # hog = Test.extract_hog_features(imm)
             # lbp = Test.extract_lbp_features(imm)
 
+            ## print delle feature di shape estratte per ogni difetto 
             # print()
             # print("Imm: "+str(imm))
             # print("Shape features:")

@@ -44,7 +44,7 @@ class Utils:
         spath = str(spath)
         name = (spath.split("/")[-1])[:-4]  #rimuovo l'estensione del 
 
-        # print("generando .png del file %s.xyz..." % name) 
+        # print("generando .png del file %s.xyz..." % name) #tolta per evitare di saturare l'ouput nelle prove con tanti campioni
 
         with Trajectory(spath) as trajectory:
             mol = trajectory.read()
@@ -195,7 +195,10 @@ class Utils:
             #chiamo la funzione che tarsforma da .xyz a .png specificando la risoluzione
             Utils.generate_bonds_png(path_file_xyz, pathPNG, 320)
             i = i+1
+            if i%100==0:    #stampo una volta ogni 100 campioni per evitare di saturare l'output
+                print(i)
         print(NUM_IMM)
+        print("Immagini salvate in: "+ str(pathPNG))
 
     #prende una cartella di immagini ne fa l'infrenza con YOLO e deposita tutti i difetti croppati nella cartella di uscita  
     def crop_from_folder(cartellaImm: str, cartellaCrop: str, model):
@@ -251,6 +254,7 @@ class Utils:
                 # cv2.destroyAllWindows()
 
                 index = index+1
+        print("Crop dei difetti salvati in: "+ cartellaCrop)
     
     # #dalla cartella cropped 
     # def from_crops_to_threshOld(pathImmagini: str):
@@ -398,5 +402,6 @@ class Utils:
             
             cv2.waitKey(0)
             cv2.destroyAllWindows() 
+        print("Nuove immagini (area evidenziata) salvate in: "+ dpath)
 
 

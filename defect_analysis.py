@@ -314,6 +314,7 @@ class Test:
 
     #     return shape_features
     
+    # funzione modificata per l'uso di questo progetto, sopra la versione originale 
     def extract_shape_features_edited(
         image: Path | np.ndarray,
         mask: Path | np.ndarray = None,
@@ -446,6 +447,8 @@ class Test:
 
         return shape_features
 
+
+    #ulteriori tipi di feature estraibili con opportune modifiche 
 
     def extract_edge_features(
         image: Path | np.ndarray,
