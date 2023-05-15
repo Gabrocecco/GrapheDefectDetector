@@ -379,7 +379,7 @@ class Test:
                 cv2.drawContours(img_with_contour, contours, -1, (0, 0, 255), 1)    #disegno tutti i contorni
                 cv2.imwrite(str(dest_path), img_with_contour)
         else:   #se non ho trovato contorni, setto i parametri a zero e salvo immagine senza contorni
-            area = 0
+            area = 1    #l'area di difetti molto piccoli viene messa arbitraiamente a 1 per evitare problemi di divisione per zero 
             perimeter = 0
             circularity = 1
             solidity = 0

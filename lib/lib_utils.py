@@ -44,7 +44,7 @@ class Utils:
         spath = str(spath)
         name = (spath.split("/")[-1])[:-4]  #rimuovo l'estensione del 
 
-        print("generando .png del file %s.xyz..." % name)
+        # print("generando .png del file %s.xyz..." % name) 
 
         with Trajectory(spath) as trajectory:
             mol = trajectory.read()
