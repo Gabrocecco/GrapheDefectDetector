@@ -57,10 +57,22 @@ model = YOLO("/home/gabro/GrapheDetectProject/best_100_campioni_new.pt")  # load
 
 
 # work in progress - ancora 0 detect 
-results = model("/home/gabro/GrapheDetectProject/real_images_demo/real_images")  # predict on an image
+# results = model("/home/gabro/GrapheDetectProject/real_images_demo/real_images")  # predict on an image
+
+Utils.crop_from_folder("/home/gabro/GrapheDetectProject/real_images_demo/real_scaled", "/home/gabro/GrapheDetectProject/real_images_demo/scaled_crop", model)
+
+Utils.from_crops_to_thresh("/home/gabro/GrapheDetectProject/real_images_demo/real_scaled", "/home/gabro/GrapheDetectProject/real_images_demo/tresh")
 
 
-
+# pathCartellaTresh = Path('/home/gabro/GrapheDetectProject/real_images_demo/tresh')
+# pathCartellaContours = Path('/home/gabro/GrapheDetectProject/real_images_demo/contours')
+# shapes = Features.from_thresh_to_contours_print_features(pathCartellaTresh,pathCartellaContours)
+# #stampa le feature estratte per ogni difetto analizzato 
+# for shape in shapes:
+#     print("Shape features:")
+#     for key in shape:
+#         print(key, ' : ', shape[key])
+#     print()
 
 
 
