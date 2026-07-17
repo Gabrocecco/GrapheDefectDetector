@@ -58,8 +58,7 @@ def aggregate_by_sample(defect_table: pd.DataFrame) -> pd.DataFrame:
         weights = group["area_px"]
         total_weight = weights.sum()
         weighted = {
-            col: (group[col] * weights).sum() / total_weight
-            for col in _AREA_WEIGHTED_COLUMNS
+            col: (group[col] * weights).sum() / total_weight for col in _AREA_WEIGHTED_COLUMNS
         }
         summed = {col: group[col].sum() for col in _SUMMED_COLUMNS}
         return pd.Series(

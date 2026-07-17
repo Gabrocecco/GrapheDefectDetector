@@ -44,9 +44,7 @@ def cmd_render(args: argparse.Namespace) -> None:
 
     config = PipelineConfig.from_yaml(args.config)
     config.ensure_output_dirs()
-    render_dataset(
-        config.xyz_dir, config.renders_dir, config.render_resolution, args.limit
-    )
+    render_dataset(config.xyz_dir, config.renders_dir, config.render_resolution, args.limit)
 
 
 def cmd_detect(args: argparse.Namespace) -> None:
@@ -151,7 +149,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = subparsers.add_parser("extract-features", help="Measure shape features of each mask")
     _add_config_arg(p)
-    p.add_argument("--with-contours", action="store_true", help="Also save annotated contour images")
+    p.add_argument(
+        "--with-contours", action="store_true", help="Also save annotated contour images"
+    )
     p.add_argument("--output", type=Path, default=None)
     p.set_defaults(func=cmd_extract_features)
 
@@ -176,9 +176,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--seed", type=int, default=None)
     p.set_defaults(func=cmd_split_yolo_labels)
 
-    p = subparsers.add_parser(
-        "run-pipeline", help="render -> detect -> segment -> build-dataset"
-    )
+    p = subparsers.add_parser("run-pipeline", help="render -> detect -> segment -> build-dataset")
     _add_config_arg(p)
     p.add_argument("--limit", type=int, default=None)
     p.add_argument("--confidence", type=float, default=None)

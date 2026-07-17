@@ -47,9 +47,7 @@ def crop_detections(
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    image_paths = sorted(
-        p for p in image_dir.iterdir() if p.suffix.lower() in IMAGE_EXTENSIONS
-    )
+    image_paths = sorted(p for p in image_dir.iterdir() if p.suffix.lower() in IMAGE_EXTENSIONS)
 
     written: list[Path] = []
     predict_kwargs = {} if confidence is None else {"conf": confidence}

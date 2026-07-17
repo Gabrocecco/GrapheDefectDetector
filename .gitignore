@@ -1,6 +1,6 @@
 # ---- Conda / virtual environments (never track an environment) ----
 .conda/
-.venv/
+.venv*/
 venv/
 env/
 

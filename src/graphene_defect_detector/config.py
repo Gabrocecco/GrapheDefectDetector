@@ -67,7 +67,7 @@ class PipelineConfig:
     render_resolution: int = 320
 
     @classmethod
-    def from_yaml(cls, path: str | Path) -> "PipelineConfig":
+    def from_yaml(cls, path: str | Path) -> PipelineConfig:
         """Load a config from a YAML file, resolving relative paths against it."""
         path = Path(path).expanduser().resolve()
         with path.open("r", encoding="utf-8") as fh:

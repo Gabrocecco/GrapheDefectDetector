@@ -104,9 +104,7 @@ def extract_shape_features(
         raise FileNotFoundError(f"Could not read mask image: {mask_path}")
 
     _, binary = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    contours, _ = cv2.findContours(
-        binary, cv2.RETR_LIST, cv2.CHAIN_APPROX_TC89_L1
-    )
+    contours, _ = cv2.findContours(binary, cv2.RETR_LIST, cv2.CHAIN_APPROX_TC89_L1)
     contours = [c for c in contours if cv2.contourArea(c) >= 1]
 
     num_pixels = image.shape[0] * image.shape[1]
@@ -139,9 +137,7 @@ def extract_shape_features(
         feret_diameter, eccentricity = 1.0, 0.0
 
         if contour_output_path is not None:
-            cv2.imwrite(
-                str(contour_output_path), cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
-            )
+            cv2.imwrite(str(contour_output_path), cv2.cvtColor(image, cv2.COLOR_GRAY2BGR))
 
     sample_id = sample_id_from_filename(mask_path.name)
     n_atoms = read_atom_count(xyz_dir, sample_id)
@@ -175,9 +171,7 @@ def extract_features_from_dir(
     results: list[ShapeFeatures] = []
     for mask_path in sorted(masks_dir.iterdir()):
         contour_output = (
-            contours_dir / f"{mask_path.stem}_contour.png"
-            if contours_dir is not None
-            else None
+            contours_dir / f"{mask_path.stem}_contour.png" if contours_dir is not None else None
         )
         results.append(extract_shape_features(mask_path, xyz_dir, contour_output))
 

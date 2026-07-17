@@ -30,6 +30,7 @@ import logging
 from pathlib import Path
 
 import cv2
+import numpy as np
 
 from .config import IMAGE_EXTENSIONS
 
@@ -39,7 +40,7 @@ _CONTOUR_INTENSITY_THRESHOLD = 245
 _CONTOUR_LINE_THICKNESS = 3
 
 
-def crop_to_mask(image_path: str | Path) -> "cv2.Mat":
+def crop_to_mask(image_path: str | Path) -> np.ndarray:
     """Apply the two-threshold defect-highlighting transform to one crop."""
     image = cv2.imread(str(image_path))
     if image is None:
@@ -48,9 +49,7 @@ def crop_to_mask(image_path: str | Path) -> "cv2.Mat":
     grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     _, binary = cv2.threshold(grayscale, 0, 255, cv2.THRESH_BINARY)
 
-    contours, _ = cv2.findContours(
-        binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE
-    )
+    contours, _ = cv2.findContours(binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
     annotated = image.copy()
     cv2.drawContours(

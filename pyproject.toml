@@ -69,12 +69,22 @@ src = ["src", "tests"]
 select = ["E", "F", "I", "UP", "B", "SIM"]
 ignore = ["E501"]
 
+[tool.ruff.lint.per-file-ignores]
+# pytest.importorskip(...) must run before importing modules that need the
+# optional dependency, which necessarily puts an import after other code.
+"tests/test_segmentation.py" = ["E402"]
+"tests/test_splitting.py" = ["E402"]
+
 [tool.black]
 line-length = 100
 target-version = ["py310", "py311"]
 
 [tool.mypy]
-python_version = "3.10"
+# Kept >= the newest stub syntax used by our dependencies (numpy's stubs use
+# 3.12's `type` statement); the project itself still targets Python >= 3.10
+# per [project.requires-python] above -- this only affects how mypy parses
+# third-party .pyi files, not what language features our own code may use.
+python_version = "3.12"
 ignore_missing_imports = true
 warn_unused_ignores = true
 namespace_packages = true

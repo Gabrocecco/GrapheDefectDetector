@@ -17,7 +17,6 @@ import logging
 from pathlib import Path
 
 import numpy as np
-from chemfiles import Trajectory
 from PIL import Image, ImageDraw
 
 logger = logging.getLogger(__name__)
@@ -65,6 +64,8 @@ def render_xyz_to_png(
     Bonds are guessed by ``chemfiles`` and drawn as colored line segments on a
     black canvas, then the image is cropped to its non-empty content.
     """
+    from chemfiles import Trajectory  # local import: chemfiles is only needed here
+
     xyz_path = Path(xyz_path)
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -86,9 +87,7 @@ def render_xyz_to_png(
         x2 = round(frame.positions[atom_b][0] * 2) + resolution / 2
         y2 = round(frame.positions[atom_b][1] * 2) + resolution / 2
 
-        color = resolve_bond_color(
-            frame.atoms[atom_a].name, frame.atoms[atom_b].name
-        )
+        color = resolve_bond_color(frame.atoms[atom_a].name, frame.atoms[atom_b].name)
         draw.line([(x1, y1), (x2, y2)], fill=color, width=0)
 
     canvas = crop_to_content(canvas)

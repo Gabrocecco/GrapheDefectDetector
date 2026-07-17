@@ -38,9 +38,7 @@ class TrainedModel:
     y_test: np.ndarray
 
     def save(self, path: str | Path) -> None:
-        joblib.dump(
-            {"model": self.model, "feature_columns": self.feature_columns}, path
-        )
+        joblib.dump({"model": self.model, "feature_columns": self.feature_columns}, path)
 
 
 def load_model(path: str | Path) -> tuple[GradientBoostingRegressor, tuple[str, ...]]:
