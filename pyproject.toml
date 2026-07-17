@@ -1,0 +1,86 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "graphene-defect-detector"
+version = "0.1.0"
+description = "Predicting physical properties of nanographene from defect geometry via YOLOv8 object detection, OpenCV shape analysis, and gradient-boosted regression."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Gabriele Ceccolini" }]
+keywords = ["graphene", "defect-detection", "yolo", "computer-vision", "materials-science"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+]
+
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "opencv-python>=4.7",
+    "pillow>=9.5",
+    "scikit-learn>=1.2",
+    "matplotlib>=3.7",
+    "seaborn>=0.12",
+    "pyyaml>=6.0",
+    "tqdm>=4.65",
+    "joblib>=1.2",
+    "chemfiles>=0.10",
+    "ultralytics>=8.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "ruff>=0.4",
+    "black>=24.0",
+    "mypy>=1.8",
+    "pre-commit>=3.6",
+]
+
+[project.scripts]
+gdd = "graphene_defect_detector.cli:main"
+
+[project.urls]
+Repository = "https://github.com/Gabrocecco/GrapheDefectDetector"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+graphene_defect_detector = ["py.typed"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311"]
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true
+warn_unused_ignores = true
+namespace_packages = true
+explicit_package_bases = true
+mypy_path = "src"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
