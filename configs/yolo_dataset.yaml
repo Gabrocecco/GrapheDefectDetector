@@ -1,0 +1,17 @@
+# YOLO dataset template for training the defect detector.
+#
+# Ultralytics resolves a relative `path:` against its own global
+# `datasets_dir` setting, not against this file's location -- a common
+# source of confusion. Prefer generating a resolved copy of this file with
+# an absolute `path:` via:
+#
+#   from graphene_defect_detector.detection import write_dataset_yaml
+#   write_dataset_yaml("data/yolo_splits", "configs/yolo_dataset.resolved.yaml")
+#
+# and pass that resolved file to `gdd` / `model.train(data=...)` instead.
+path: ../data/yolo_splits
+train: train/
+val: test/
+
+names:
+  0: defect

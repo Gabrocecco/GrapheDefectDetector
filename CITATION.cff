@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the original thesis (preferred-citation below)."
+title: "Graphene Defect Detector"
+abstract: >
+  A pipeline that detects structural defects in simulated nanographene
+  samples with YOLOv8 object detection, measures their geometry with
+  OpenCV, and predicts each sample's total energy from that geometry with
+  a gradient-boosted regressor. Implements the method developed in the
+  author's engineering thesis at CNR-ISMN (Istituto per lo Studio dei
+  Materiali Nanostrutturati), University of Bologna.
+authors:
+  - family-names: Ceccolini
+    given-names: Gabriele
+date-released: 2023-01-01
+license: MIT
+repository-code: "https://github.com/Gabrocecco/GrapheDefectDetector"
+preferred-citation:
+  type: thesis
+  title: "Modelli Predittivi basati su Computer Vision per Proprietà Fisiche di Nanografene"
+  authors:
+    - family-names: Ceccolini
+      given-names: Gabriele
+  institution:
+    name: "Alma Mater Studiorum - Università di Bologna"
+  year: 2023
+references:
+  - type: article
+    title: "GrapheNet: A Novel Deep Learning Model for Predicting Physical and Electronic Properties of 2D Materials Using Images"
+    authors:
+      - family-names: Forni
+        given-names: Tommaso
+      - family-names: Baldoni
+        given-names: Matteo
+      - family-names: Mercuri
+        given-names: Francesco
+    notes: "Cited in the preferred-citation thesis as a related work from the same CNR-ISMN research group."

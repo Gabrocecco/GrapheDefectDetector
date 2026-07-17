@@ -1,0 +1,21 @@
+# Default pipeline configuration.
+#
+# All paths are relative to this file's location (see
+# graphene_defect_detector.config.PipelineConfig.from_yaml), so this config
+# works from any working directory, on Linux or Windows.
+root: ..
+
+xyz_dir: data/xyz
+renders_dir: data/renders
+crops_dir: data/crops
+masks_dir: data/masks
+contours_dir: data/contours
+tables_dir: data/tables
+
+weights_path: models/defect_detector_yolov8.pt
+energy_csv: data/tables/dataset_graphene.csv
+
+yolo_labeled_dir: data/yolo_labeled
+yolo_splits_dir: data/yolo_splits
+
+render_resolution: 320
