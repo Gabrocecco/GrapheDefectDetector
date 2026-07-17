@@ -19,7 +19,7 @@ from the geometry of its structural defects (reported R² ≈ 0.97).
   hardcoded absolute paths.
 - **Installable package** with a clean `src/` layout and a single CLI.
 - **Reproducible** — every pipeline stage runs from config, no magic paths.
-- **Tested & linted** — pytest, ruff, black, mypy, pre-commit, CI.
+- **Tested & linted** — pytest, ruff, black, mypy, pre-commit.
 - **Honest git hygiene** — the build environment is no longer tracked.
 
 ## 2. Original pipeline (preserved semantics)
@@ -86,8 +86,7 @@ graphene-defect-detector/
   paths, make cross-platform.
 - **Phase 3 — CLI + config.** `gdd render|detect|segment|features|build|train|predict`
   driven by `configs/pipeline.yaml`.
-- **Phase 4 — tests + CI.** pytest fixtures, ruff/black/mypy, GitHub Actions
-  (Linux primary, Windows smoke), pre-commit.
+- **Phase 4 — tests + lint.** pytest fixtures, ruff/black/mypy, pre-commit.
 - **Phase 5 — docs.** English README + method notes distilled from the thesis,
   data-acquisition guide, GrapheNet citation.
 
